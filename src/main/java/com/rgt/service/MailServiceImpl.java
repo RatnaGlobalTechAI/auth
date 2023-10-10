@@ -24,10 +24,9 @@ public class MailServiceImpl implements MailService {
 
 	@Autowired
 	private RegisterUserRepository registerUserRepository;
-	
+
 	@Autowired
 	private JavaMailSender javaMailSender;
-	
 
 	@Override
 	public ResponseObject sendDataByEmail(String senders) {
@@ -49,29 +48,27 @@ public class MailServiceImpl implements MailService {
 							registerUserEntity.getUsername() == null ? "" : registerUserEntity.getUsername())
 					.replace("$address", registerUserEntity.getAddress() == null ? "" : registerUserEntity.getAddress())
 					.replace("$city", registerUserEntity.getCity() == null ? "" : registerUserEntity.getCity())
-					.replace("$pincode", registerUserEntity.getPincode())
-					.replace("$dob", registerUserEntity.getDob());
+					.replace("$pincode", registerUserEntity.getPincode()).replace("$dob", registerUserEntity.getDob());
 			bodyPart.append(rowpart);
 
 			logger.info("Data for row part" + rowpart);
 		}
 
-
 		if (sendInEmail) {
-		
-			boolean resposneStatus = sendMail(htmldata.toString().replace("$tableContent", bodyPart.toString()) , senders);   // ? "Email Sent Successfully." : "Email delivery failed";
 
-			if(resposneStatus) {
-				
+			boolean resposneStatus = sendMail(htmldata.toString().replace("$tableContent", bodyPart.toString()),
+					senders); // ? "Email Sent Successfully." : "Email delivery failed";
+
+			if (resposneStatus) {
+
 				response.setStatus(true);
 				response.setSuccessMessage("Email Sent Successfully.");
-				
-			}else {
+
+			} else {
 				response.setStatus(false);
 				response.setErrorMessage("Email delivery failed");
-				
+
 			}
-			
 
 		} else {
 			htmldata.toString().replace("$tableContent", bodyPart.toString());
@@ -87,19 +84,19 @@ public class MailServiceImpl implements MailService {
 		return emailBody;
 	}
 
-	private boolean sendMail(String emailBody, String senders) {
+	@Override
+	public boolean sendMail(String emailBody, String senders) {
 		try {
-			String subject = CommonUtility
-					.getValueFromPropeties("SEND.SUBJECT", Constant.COMMON_FILE_NAME).trim();
+			String subject = CommonUtility.getValueFromPropeties("SEND.SUBJECT", Constant.COMMON_FILE_NAME).trim();
 			String sendTo = CommonUtility.getValueFromPropeties("SEND.USERS", Constant.COMMON_FILE_NAME).trim();
 			if (subject == null || subject.equals("") || sendTo == null || sendTo.equals(""))
 				return false;
-			
+
 			String[] sendersList = senders.split(",");
 			String senderEmails = "";
 			for (String sender : sendersList)
-				//senderEmails += sender + "@gmail.com;";
-			senderEmails += sender;
+				// senderEmails += sender + "@gmail.com;";
+				senderEmails += sender;
 			MailClientUtils.sendMailWithDefaultConf(subject, emailBody, senderEmails);
 			return true;
 		} catch (Exception e) {
@@ -108,43 +105,36 @@ public class MailServiceImpl implements MailService {
 		return false;
 	}
 
-	
-	//only message send
+	// only message send
 	@Override
 	public ResponseObject sendDataByEmailWithBody(String senders) {
-
 		boolean sendInEmail = true;
-//
+
 		ResponseObject response = new ResponseObject();
 		StringBuilder htmldata = new StringBuilder();
 
-
 		if (sendInEmail) {
-			
 			htmldata.append("This is Ratna Global Technologies Test Mail, Please Ignore");
-		
-			boolean resposneStatus = sendMail(htmldata.toString() , senders);   // ? "Email Sent Successfully." : "Email delivery failed";
 
-			if(resposneStatus) {
-				
+			boolean resposneStatus = sendMail(htmldata.toString(), senders); // ? "Email Sent Successfully." : "Email
+
+			if (resposneStatus) {
+
 				response.setStatus(true);
 				response.setSuccessMessage("Email Sent Successfully.");
-				
-			}else {
+
+			} else {
 				response.setStatus(false);
 				response.setErrorMessage("Email delivery failed");
-				
 			}
-			
 
 		} else {
 			htmldata.toString();
 		}
-
 		return response;
 	}
-	
-	//otpsendmail
+
+	// otpsendmail
 	@Override
 	@Async
 	public void sendEmail(String toMail, String subject, String messageBody) {
@@ -155,6 +145,5 @@ public class MailServiceImpl implements MailService {
 		simpleMailMessage.setText(messageBody);
 		javaMailSender.send(simpleMailMessage);
 	}
-	
-	
+
 }

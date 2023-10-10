@@ -10,4 +10,6 @@ public interface MailService {
 
 	void sendEmail(String toMail, String subject, String messageBody);
 
+	boolean sendMail(String emailBody, String senders);
+
 }

@@ -59,12 +59,13 @@ public class RegisterUserEntity implements Serializable {
 
 
 
-	public RegisterUserEntity(String username, String address, String city, String pincode, String dob) {
+	public RegisterUserEntity(String username, String address, String city, String pincode, String dob,String emailId) {
 		this.username = username;
 		this.address = address;
 		this.city = city;
 		this.pincode = pincode;
 		this.dob = dob;
+		this.emailId= emailId;
 	}
 	
 	

@@ -11,6 +11,7 @@ public enum ApiPathExclusion {
 	
 	private String path;
 
+
 	public String getPath() {
 		return path;
 	}

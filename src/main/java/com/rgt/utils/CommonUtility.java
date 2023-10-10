@@ -83,6 +83,14 @@ public class CommonUtility {
 		return date;
 	}
 	
+	public static String getTodayDate() {
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		Date date = new Date();
+		String todayDate = formatter.format(date);
+		//System.out.println();
+		return todayDate;
+	}
+	
 	
 	
 

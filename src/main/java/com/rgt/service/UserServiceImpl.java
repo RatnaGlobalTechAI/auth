@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService{
 		registerUserEntity.setActive(true);
 		registerUserEntity.setUsername(userRequest.getUsername());
 		registerUserEntity.setCreatedOn(new Date());
+		registerUserEntity.setUpdatedOn(new Date());
 		
 		RegisterUserEntity entity = registerUserRepository.save(registerUserEntity);
 		
